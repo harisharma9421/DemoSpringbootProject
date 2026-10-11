@@ -1,8 +1,13 @@
 package com.springboot.student_management_system.controller;
 
+import com.springboot.student_management_system.DTO.StudentRequestDTO;
+import com.springboot.student_management_system.DTO.StudentResponseDTO;
 import com.springboot.student_management_system.Entity.StudentEntity;
 import com.springboot.student_management_system.Repository.StudentRepository;
 import com.springboot.student_management_system.service.StudentService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,41 +28,34 @@ public class StudentController {
     }
 
     @PostMapping("/saveStudent")
-    public StudentEntity saveStudent(@RequestBody StudentEntity student){
-        return studentService.saveStudent(student);
+    public ResponseEntity<StudentResponseDTO> saveStudent(@Valid @RequestBody StudentRequestDTO student){
+        StudentResponseDTO savedStudent = studentService.saveStudent(student);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedStudent);
     }
 
     @GetMapping("/getStudent/{id}")
-    public StudentEntity getStudentById(@PathVariable Long id){
-        return studentService.getStudentById(id);
+    public ResponseEntity<StudentResponseDTO> getStudentById(@PathVariable Long id){
+        return ResponseEntity.ok(studentService.getStudentById(id));
     }
 
     @GetMapping("/getAllStudents")
-    public List<StudentEntity> getAllStudents(){
-        return studentService.getAllStudent();
+    public ResponseEntity<List<StudentResponseDTO>> getAllStudents(){
+        return ResponseEntity.ok(studentService.getAllStudent());
     }
 
     @PatchMapping("/patchStudent/{id}")
-    public String patchStudent(@PathVariable Long id, @RequestBody StudentEntity student){
-        StudentEntity patchedStudents = studentService.patchStudent(id, student);
-        if(patchedStudents == null){
-            return "Student failed to update";
-        }
-        return "Student with student ID "+id+" updated successfully!";
+    public ResponseEntity<StudentResponseDTO> patchStudent(@PathVariable Long id, @RequestBody StudentRequestDTO student){
+        return ResponseEntity.ok(studentService.patchStudent(id, student));
     }
 
     @PutMapping("/updateStudent/{id}")
-    public String updateStudent(@PathVariable Long id, @RequestBody StudentEntity student){
-        StudentEntity updatedStudent = studentService.updateStudent(id,student);
-        if(updatedStudent == null){
-            return "Student failed to update!";
-        }
-        return "Details of students with student ID: "+id+" updated successfully!";
+    public ResponseEntity<StudentResponseDTO> updateStudent(@Valid @PathVariable Long id, @RequestBody StudentRequestDTO student){
+       return ResponseEntity.ok(studentService.updateStudent(id,student));
     }
 
     @DeleteMapping("/deleteStudent/{id}")
-    public String deleteStudentById(@PathVariable Long id){
+    public ResponseEntity<Void> deleteStudentById(@PathVariable Long id){
         studentService.deleteStudent(id);
-        return "Student with "+id+" deleted successfully!";
+        return ResponseEntity.noContent().build();
     }
 }

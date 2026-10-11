@@ -1,5 +1,7 @@
 package com.springboot.student_management_system.service;
 
+import com.springboot.student_management_system.DTO.StudentRequestDTO;
+import com.springboot.student_management_system.DTO.StudentResponseDTO;
 import com.springboot.student_management_system.Entity.StudentEntity;
 import org.springframework.stereotype.Service;
 
@@ -7,10 +9,10 @@ import java.util.List;
 
 @Service
 public interface StudentService {
-    StudentEntity saveStudent(StudentEntity student);
-    List<StudentEntity> getAllStudent();
-    StudentEntity getStudentById(Long Id);
+    StudentResponseDTO saveStudent(StudentRequestDTO dto);
+    List<StudentResponseDTO> getAllStudent();
+    StudentResponseDTO getStudentById(Long Id);
     void deleteStudent(Long Id);
-    StudentEntity updateStudent(Long Id, StudentEntity student);
-    StudentEntity patchStudent(Long Id, StudentEntity student);
+    StudentResponseDTO updateStudent(Long Id, StudentRequestDTO dto);
+    StudentResponseDTO patchStudent(Long Id, StudentRequestDTO dto);
 }
